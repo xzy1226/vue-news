@@ -1,42 +1,52 @@
 <template>
   <div class="container">
     <div class="closeBtn">
-      <i class="iconfont iconicon-test"></i>
+      <i class="iconfont iconicon-test" @click="$router.back()"></i>
     </div>
+
     <div class="logo">
       <span class="iconfont iconnew"></span>
     </div>
-    <div class="username">
+
+    <div class="userName">
       <authInput
         type="text"
         placeholder="用户名/手机号码"
-        rule="^\d{6,13}$"
+        rule="^\d{5,13}$"
         err_message="请输入正确的手机号"
         @input="setUserName"
       ></authInput>
     </div>
+
+    <div class="nickName">
+      <authInput
+        type="text"
+        placeholder="昵称"
+        rule="^\w{2,12}$"
+        err_message="请输入正确的昵称"
+        @input="setNickName"
+      ></authInput>
+    </div>
+
     <div class="password">
       <authInput
-        type="password"
+        type="text"
         placeholder="密码"
         rule="^[a-z0-9_-]{3,12}$"
         err_message="请输入3~12位密码"
         @input="setPassWord"
       ></authInput>
     </div>
-    <div class="loginBtn">
-      <authBtn text="登录" @send="sendLogin" />
-    </div>
-    <div class="toRegister">
-      <router-link to="/register">立即注册</router-link>
-    </div>
 
+    <div class="registerBtn">
+      <authBtn text="注册" @send="sendRegister" />
+    </div>
   </div>
 </template>
 
 <script>
-import authInput from '../components/authInput';
-import authBtn from '../components/authBtn';
+import authInput from "../components/authInput";
+import authBtn from "../components/authBtn";
 export default {
   components: {
     authInput,
@@ -44,35 +54,42 @@ export default {
   },
   data() {
     return {
-      username: '',
-      password: '',
-    }
+      username: "",
+      password: "",
+      nickname: ""
+    };
   },
   methods: {
-    setUserName(val){
-      this.username=val;
+    setUserName(val) {
+      this.username = val;
     },
-    setPassWord(val){
-      this.password=val;
+    setNickName(val) {
+      this.nickname = val;
     },
-    sendLogin(){
+    setPassWord(val) {
+      this.password = val;
+    },
+    sendRegister() {
       // 判断内容是否存在
-      if(this.username==''||this.password==''){
-        this.$toast.fail('输入内容不能为空');
+      if (this.username == '' || this.password == '' || this.nickname== '') {
+        this.$toast.fail("输入内容不能为空");
         return;
       }
 
-      this.$axios.post('/login',{
+      this.$axios.post('/register',{
         username: this.username,
-        password: this.password
+        password: this.password,
+        nickname: this.nickname
       }).then(res=>{
         console.log(res);
-        if(res.data.statusCode && res.data.statusCode===401){
+        if(res.data.statusCode && res.data.statusCode===400){
           this.$toast.fail( res.data.message);
+        }else{
+          this.$toast.success( res.data.message);
         }
       })
     }
-  },
+  }
 };
 </script>
 
@@ -97,12 +114,5 @@ export default {
       color: #d81e06;
     }
   }
-
-  .toRegister{
-    margin-top: 3.333vw;
-    font-size: 4.444vw;
-    text-align: right;
-  }
-
 }
 </style>

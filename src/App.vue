@@ -11,6 +11,7 @@ export default {
 </script>
 
 <style>
+  @import url('http://at.alicdn.com/t/font_1426139_h6vn3jbl5q.css');
   *{
     padding: 0;
     margin: 0;
@@ -18,10 +19,13 @@ export default {
 
   a{
     color: inherit;
+  }
+
+  a:hover{
     text-decoration: none;
   }
 
-  ul,li{
+  ul,li,ol{
     list-style: none;
   }
 
