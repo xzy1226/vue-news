@@ -1,13 +1,150 @@
 <template>
-  
+  <div class="container">
+    <div class="profile">
+      <!-- 头像不存在，则默认头像 -->
+      <img
+        v-if="profile.head_img"
+        class="logo"
+        src="http://127.0.0.1:3000/uploads/image/IMG1568705287936.jpeg"
+        alt
+      />
+      <img v-else class="logo" src="@/assets/img/default.png" alt />
+      <div class="user">
+        <div class="name">
+          <!-- 判断性别 -->
+          <i v-if="profile.gender==1" class="iconfont iconxingbienan"></i>
+          <i v-else class="iconfont iconxingbienv"></i>
+          {{profile.nickname}}
+        </div>
+        <div class="time">2019-10-26</div>
+      </div>
+      <span class="iconfont iconjiantou1"></span>
+    </div>
+
+    <div v-for="(item,index) of labelList" :key="index">
+      <cellBar :label="item.label" :desc="item.desc" @toPage="toPageLink"></cellBar>
+    </div>
+
+    <cellBar label="设置" @toPage="toEditPage"></cellBar>
+
+
+    <div class="logout">
+      <authBtn text="退出登录" @send="Logout" />
+    </div>
+  </div>
 </template>
 
 <script>
+import cellBar from "../components/cellBar";
+import authBtn from "../components/authBtn";
 export default {
+  components: { cellBar, authBtn },
+  data() {
+    return {
+      labelList: [
+        {
+          label: "我的关注",
+          desc: "关注的用户",
+          pathName: "/"
+        },
+        {
+          label: "我的跟帖",
+          desc: "跟帖/回复",
+          pathName: "/"
+        },
+        {
+          label: "我的收藏",
+          desc: "文章/视频",
+          pathName: "/"
+        }
+      ],
+      profile: {}
+    };
+  },
+  methods: {
+    toPageLink(val) {
+      if (val === "我的关注") {
+        console.log(val);
+      }
+    },
+    toEditPage() {
+      this.$router.push({name: 'editprofile'})
+    },
+    Logout() {
+      //删除数据
+      localStorage.removeItem("token");
+      localStorage.removeItem("user_id");
+      //提示
+      this.$toast.success("退出成功");
+      //设置定时
+      let timer = setTimeout(() => {
+        clearTimeout(timer); //清除定时
+        //跳转到登录
+        this.$router.replace({ name: "login" });
+      }, 1000);
+    }
+  },
+  mounted() {
+    this.$axios.get(`/user/${localStorage.getItem("user_id")}`).then(res => {
+      //token信息过期或错误，跳转到登录
+      if(res.data.statusCode==401) this.$router.push({name: 'login'});
 
-}
+      this.profile = res.data.data;
+    })
+  }
+};
 </script>
 
 <style lang="less" scoped>
+.container {
+  .profile {
+    display: flex;
+    box-sizing: border-box;
+    justify-content: space-around;
+    align-items: center;
+    padding: 8.333vw 0;
+    border-bottom: 5px solid #ddd;
 
+    .logo,
+    .user {
+      margin-left: 5.556vw;
+    }
+    .logo {
+      width: 19.444vw;
+      height: 19.444vw;
+      border-radius: 9.722vw;
+    }
+
+    .user {
+      flex: 1;
+      .name {
+        font-size: 4.444vw;
+
+        .iconxingbienan {
+          color: skyblue;
+        }
+        .iconxingbienv {
+          color: pink;
+        }
+      }
+
+      .time {
+        font-size: 3.889vw;
+        color: #999;
+      }
+    }
+
+    .iconjiantou1 {
+      font-size: 5vw;
+      margin-right: 2.778vw;
+    }
+  }
+
+  .logout {
+    position: absolute;
+    left: 20%;
+    bottom: 50px;
+    width: 60%;
+  }
+}
 </style>

@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="closeBtn">
-      <i class="iconfont iconicon-test"></i>
+      <i @click="toBack" class="iconfont iconicon-test"></i>
     </div>
     <div class="logo">
       <span class="iconfont iconnew"></span>
@@ -66,21 +66,25 @@ export default {
         username: this.username,
         password: this.password
       }).then(res=>{
-        console.log(res);
         if(!res.data.statusCode){
           //提示信息
           this.$toast.success( res.data.message);
+          
           //保存数据
           localStorage.setItem('token',res.data.data.token);
-          localStorage.setItem('user_id',res.data.data.user.id)
+          localStorage.setItem('user_id',res.data.data.user.id);
+          
           //设置定时
           let timer=setTimeout(() => {
             clearTimeout(timer)   //清除定时器
             //跳转
-            this.$router.push({name: 'profile'})
+            this.$router.push({name: 'index'})
           }, 1000);
         }
       })
+    },
+    toBack(){
+      this.$router.back()
     }
   },
 };
