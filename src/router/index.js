@@ -5,6 +5,13 @@ import Login from '@/pages/Login'
 import Register from '@/pages/Register'
 import Index from '@/pages/Index'
 import Profile from '@/pages/Profile';
+import EditProfile from '@/pages/EditProfile'
+
+const originalPush = Router.prototype.push
+Router.prototype.push = function push(location) {
+  return originalPush.call(this, location).catch(err => err)
+}
+
 
 Vue.use(Router)
 
@@ -31,9 +38,14 @@ export default new Router({
       component: Index
     },
     {
-      path: 'profile',
+      path: '/profile',
       name: 'profile',
       component: Profile
+    },
+    {
+      path: 'editprofile',
+      name: 'editprofile',
+      component: EditProfile
     }
   ]
 })
