@@ -75,16 +75,13 @@ export default {
         this.$toast.fail("输入内容不能为空");
         return;
       }
-
+      //发送请求
       this.$axios.post('/register',{
         username: this.username,
         password: this.password,
         nickname: this.nickname
       }).then(res=>{
-        console.log(res);
-        if(res.data.statusCode && res.data.statusCode===400){
-          this.$toast.fail( res.data.message);
-        }else{
+        if(!res.data.statusCode){
           this.$toast.success( res.data.message);
         }
       })

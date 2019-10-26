@@ -10,7 +10,7 @@
       <authInput
         type="text"
         placeholder="用户名/手机号码"
-        rule="^\d{6,13}$"
+        rule="^\d{5,13}$"
         err_message="请输入正确的手机号"
         @input="setUserName"
       ></authInput>
@@ -61,14 +61,24 @@ export default {
         this.$toast.fail('输入内容不能为空');
         return;
       }
-
+      //发送请求
       this.$axios.post('/login',{
         username: this.username,
         password: this.password
       }).then(res=>{
         console.log(res);
-        if(res.data.statusCode && res.data.statusCode===401){
-          this.$toast.fail( res.data.message);
+        if(!res.data.statusCode){
+          //提示信息
+          this.$toast.success( res.data.message);
+          //保存数据
+          localStorage.setItem('token',res.data.data.token);
+          localStorage.setItem('user_id',res.data.data.user.id)
+          //设置定时
+          let timer=setTimeout(() => {
+            clearTimeout(timer)   //清除定时器
+            //跳转
+            this.$router.push({name: 'profile'})
+          }, 1000);
         }
       })
     }
