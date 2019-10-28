@@ -18,13 +18,31 @@ Toast.setDefaultOptions({
   duration: 1000
 })
 
+//路由守卫
+router.beforeEach((to, from, next) => {
+
+  const pagesNeedAuth=['/profile','/editprofile']
+
+  if (pagesNeedAuth.includes(to.path)) {
+    localStorage.getItem('token') ? next() : router.push({name: 'login'});
+    // localStorage.getItem('token') ? next() : next('/login')
+    // localStorage.getItem('token') ? next() : location.href='#/login';
+  }else{
+    next();
+  }
+})
+
 //设置全局的基准url
 axios.defaults.baseURL = 'http://127.0.0.1:3000';
+// axios.defaults.baseURL = 'http://111.230.181.206:3000';
 
 // 设置请求拦截器
 axios.interceptors.request.use(config => {
   //设置请求头
-  config.headers.Authorization = localStorage.getItem('token');
+  if(!config.headers.Authorization&& localStorage.getItem('token')){
+    config.headers.Authorization = localStorage.getItem('token');
+  }
+  
   return config
 })
 
@@ -36,22 +54,11 @@ axios.interceptors.response.use((res) => {
   } = res.data;
   //请求失败提示信息
   if (message && statusCode === 401 && !router.currentRoute.name.includes('index')) Toast.fail(message);
-
+  
+  //token信息过期或错误，跳转到登录
+  if(message=='用户信息验证失败') router.push({name: 'login'});
   return res;
 });
-
-
-//路由守卫
-router.beforeEach((to, from, next) => {
-
-  if (to.path == '/profile') {
-    localStorage.getItem('token') ? next() : next('/login')
-  }
-
-  next();
-
-})
-
 
 
 Vue.prototype.$axios = axios;
