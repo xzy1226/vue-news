@@ -24,7 +24,7 @@
     </div>
 
     <div v-for="(item,index) of labelList" :key="index">
-      <cellBar :label="item.label" :desc="item.desc" @toPage="toPageLink"></cellBar>
+      <cellBar :label="item.label" :desc="item.desc" @toPage="toPageLink(index)"></cellBar>
     </div>
 
     <cellBar label="设置" @toPage="toEditPage"></cellBar>
@@ -46,7 +46,7 @@ export default {
         {
           label: "我的关注",
           desc: "关注的用户",
-          pathName: "/"
+          pathName: "myfollow"
         },
         {
           label: "我的跟帖",
@@ -63,10 +63,9 @@ export default {
     };
   },
   methods: {
-    toPageLink(val) {
-      if (val === "我的关注") {
-        console.log(val);
-      }
+    toPageLink(index) {
+      this.$router.push({name: this.labelList[index].pathName})
+      
     },
     toEditPage() {
       this.$router.push({ name: "editprofile" });

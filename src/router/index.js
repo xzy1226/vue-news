@@ -4,8 +4,9 @@ import HelloWorld from '@/components/HelloWorld'
 import Login from '@/pages/Login'
 import Register from '@/pages/Register'
 import Index from '@/pages/Index'
-import Profile from '@/pages/Profile';
+import Profile from '@/pages/Profile'
 import EditProfile from '@/pages/EditProfile'
+import MyFollow from '@/pages/MyFollow';
 
 // const originalPush = Router.prototype.push
 // Router.prototype.push = function push(location) {
@@ -46,6 +47,11 @@ export default new Router({
       path: '/editprofile',
       name: 'editprofile',
       component: EditProfile
+    },
+    {
+      path: '/myfollow',
+      name: 'myfollow',
+      component: MyFollow
     }
   ]
 })
