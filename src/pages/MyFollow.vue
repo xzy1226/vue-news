@@ -57,33 +57,33 @@ export default {
     justify-content: space-between;
     align-items: center;
     box-sizing: border-box;
-    padding: 20px;
+    padding: 5.556vw;
     border-bottom: 1px solid #ddd;
 
     img {
-      width: 40px;
-      height: 40px;
+      width: 11.111vw;
+      height: 11.111vw;
       border-radius: 50%;
     }
 
     .user {
       flex: 1;
       text-align: left;
-      padding-left: 20px;
+      padding-left: 5.556vw;
 
       .time {
-        font-size: 14px;
+        font-size: 3.889vw;
         color: #999;
       }
     }
 
     .cancel-Btn {
-      height: 30px;
-      line-height: 30px;
-      padding: 0 15px;
-      font-size: 14px;
+      height: 8.333vw;
+      line-height: 8.333vw;
+      padding: 0 4.167vw;
+      font-size: 3.889vw;
       background-color: #d7d7d7;
-      border-radius: 15px;
+      border-radius: 4.167vw;
     }
   }
 }

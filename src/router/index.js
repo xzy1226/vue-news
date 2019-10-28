@@ -6,7 +6,8 @@ import Register from '@/pages/Register'
 import Index from '@/pages/Index'
 import Profile from '@/pages/Profile'
 import EditProfile from '@/pages/EditProfile'
-import MyFollow from '@/pages/MyFollow';
+import MyFollow from '@/pages/MyFollow'
+import MyComment from '@/pages/MyComment';
 
 // const originalPush = Router.prototype.push
 // Router.prototype.push = function push(location) {
@@ -52,6 +53,11 @@ export default new Router({
       path: '/myfollow',
       name: 'myfollow',
       component: MyFollow
+    },
+    {
+      path: '/mycomment',
+      name: 'mycomment',
+      component: MyComment
     }
   ]
 })

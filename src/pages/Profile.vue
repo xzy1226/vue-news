@@ -51,7 +51,7 @@ export default {
         {
           label: "我的跟帖",
           desc: "跟帖/回复",
-          pathName: "/"
+          pathName: "mycomment"
         },
         {
           label: "我的收藏",
@@ -65,7 +65,6 @@ export default {
   methods: {
     toPageLink(index) {
       this.$router.push({name: this.labelList[index].pathName})
-      
     },
     toEditPage() {
       this.$router.push({ name: "editprofile" });
