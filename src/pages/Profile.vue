@@ -1,14 +1,16 @@
 <template>
   <div class="container">
-    <div class="profile">
-      <!-- 头像不存在，则默认头像 -->
+    <div class="profile" @click="toEditPage">
+      <!-- 头像不存在，则默认头像
       <img
         v-if="profile.head_img"
         class="logo"
         src="http://127.0.0.1:3000/uploads/image/IMG1568705287936.jpeg"
         alt
       />
-      <img v-else class="logo" src="@/assets/img/default.png" alt />
+      <img v-else class="logo" src="@/assets/img/default.png" alt />-->
+
+      <img :src="profile.head_img" class="logo" alt />
       <div class="user">
         <div class="name">
           <!-- 判断性别 -->
@@ -26,7 +28,6 @@
     </div>
 
     <cellBar label="设置" @toPage="toEditPage"></cellBar>
-
 
     <div class="logout">
       <authBtn text="退出登录" @send="Logout" />
@@ -68,7 +69,7 @@ export default {
       }
     },
     toEditPage() {
-      this.$router.push({name: 'editprofile'})
+      this.$router.push({ name: "editprofile" });
     },
     Logout() {
       //删除数据
@@ -86,11 +87,12 @@ export default {
   },
   mounted() {
     this.$axios.get(`/user/${localStorage.getItem("user_id")}`).then(res => {
-      //token信息过期或错误，跳转到登录
-      if(res.data.statusCode==401) this.$router.push({name: 'login'});
-
       this.profile = res.data.data;
-    })
+      //设置默认头像
+      this.profile.head_img = this.profile.head_img
+        ? this.$axios.defaults.baseURL + this.profile.head_img
+        : "/static/img/default.png";
+    });
   }
 };
 </script>
