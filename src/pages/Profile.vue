@@ -145,7 +145,7 @@ export default {
   .logout {
     position: absolute;
     left: 20%;
-    bottom: 50px;
+    bottom: 13.889vw;
     width: 60%;
   }
 }
