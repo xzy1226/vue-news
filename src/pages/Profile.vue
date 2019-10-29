@@ -1,5 +1,7 @@
 <template>
   <div class="container">
+    <headerNav title="个人中心"></headerNav>
+
     <div class="profile" @click="toEditPage">
       <!-- 头像不存在，则默认头像
       <img
@@ -38,8 +40,10 @@
 <script>
 import cellBar from "../components/cellBar";
 import authBtn from "../components/authBtn";
+import headerNav from "../components/headerNav";
+
 export default {
-  components: { cellBar, authBtn },
+  components: { cellBar, authBtn,headerNav },
   data() {
     return {
       labelList: [
@@ -56,7 +60,7 @@ export default {
         {
           label: "我的收藏",
           desc: "文章/视频",
-          pathName: "/"
+          pathName: "mycollection"
         }
       ],
       profile: {}

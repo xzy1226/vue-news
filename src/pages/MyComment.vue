@@ -56,11 +56,11 @@ export default {
 <style lang="less" scoped>
   .container{
     .my-comment{
-      padding: 20px;
+      padding: 5.556vw;
       border-bottom: 1px solid #ddd;
 
       .date,.parent,.post-origin{
-        font-size: 14px;
+        font-size: 3.889vw;
         color: #999;
       }
 
@@ -71,20 +71,20 @@ export default {
       }
 
       .date{
-        margin-bottom: 15px;
+        margin-bottom: 4.167vw;
       }
       .parent{
-        padding: 10px 0 10px 10px;
+        padding: 2.778vw 0 2.778vw 2.778vw;
         background-color: #e4e4e4;
 
         .parent-content{
-          font-size: 15px;
-          padding-top: 10px;
+          font-size: 4.167vw;
+          padding-top: 2.778vw;
         }
       }
 
       .content{
-        margin: 15px 0;
+        margin: 4.167vw 0;
       }
 
       .post-origin{
@@ -97,16 +97,16 @@ export default {
         }
 
         .icon{
-          margin-left: 20px;
+          margin-left: 5.556vw;
         }
       }
     }
 
     .more-comment{
       width: 100%;
-      font-size: 14px;
-      padding: 10px 0;
-      margin: 20px 0 ;
+      font-size: 3.889vw;
+      padding: 2.778vw 0;
+      margin: 5.556vw 0 ;
       text-align: center;
       color: #999;
     }

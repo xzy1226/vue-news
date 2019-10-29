@@ -7,7 +7,8 @@ import Index from '@/pages/Index'
 import Profile from '@/pages/Profile'
 import EditProfile from '@/pages/EditProfile'
 import MyFollow from '@/pages/MyFollow'
-import MyComment from '@/pages/MyComment';
+import MyComment from '@/pages/MyComment'
+import MyCollection from '@/pages/MyCollection';
 
 // const originalPush = Router.prototype.push
 // Router.prototype.push = function push(location) {
@@ -21,8 +22,7 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'HelloWorld',
-      component: HelloWorld
+      redirect: '/index'
     },
     {
       path: '/login',
@@ -58,6 +58,10 @@ export default new Router({
       path: '/mycomment',
       name: 'mycomment',
       component: MyComment
+    },{
+      path: '/mycollection',
+      name: 'mycollection',
+      component: MyCollection
     }
   ]
 })
