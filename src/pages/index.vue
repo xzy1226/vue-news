@@ -173,9 +173,19 @@ export default {
       padding-right: 40px;
     }
 
+    /deep/.van-sticky--fixed{
+      /deep/.van-tabs__wrap{
+        padding-right: 0px;
+      }
+    }
+
     /deep/.van-tab {
       font-size: 5vw !important;
       // color: #000;
+    }
+
+    /deep/.van-sticky{
+      background-color: #e4e4e4;
     }
 
     .tab-icon {
