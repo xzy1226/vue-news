@@ -1,5 +1,6 @@
 <template>
   <div class="container">
+    <!-- 头部 -->
     <div class="header">
       <div class="logo">
         <i class="iconfont iconnew"></i>
@@ -8,49 +9,121 @@
         <i class="iconfont iconsearch"></i>
         <span>搜索新闻</span>
       </div>
-      <div class="user" @click="toProfile">
+      <div class="user" @click="$router.push('/profile')">
         <i class="iconfont iconwode"></i>
       </div>
     </div>
+    
+    <div class="tab">
+      <van-tabs  background="#e4e4e4" v-model="tabActive" animated swipeable sticky>
+        <van-tab
+          v-for="(item,index) in tabList"
+          :key="index"
+          :title="item.name">
 
-    <!-- <div class="tab">
-      <van-row>
-        <van-col span="20">
-          <van-tabs background="#e4e4e4" border="false" line-width="0">
-            <van-tab v-for="index in 8" :key="index" :title="'标签 ' + index">内容 {{ index }}</van-tab>
-          </van-tabs>
-        </van-col>
-        <van-col span="4">
-          <div class="tab-icon">
-            <i class="iconfont iconjiantou2"></i>
-          </div>
-        </van-col>
-      </van-row>
-    </div> -->
+            <van-list
+              v-model="loading"
+              :immediate-check="false"
+              :finished="item.finished"
+              finished-text="没有更多了"
+              @load="LoadMorePost">
+              <post v-for="(post,index) in item.posts" :key="index" :item="post" />
+            </van-list>
+            
+        </van-tab>
+      </van-tabs>
+
+      <div class="tab-icon">
+          <i class="iconfont iconjiantou2"></i>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
+import post from '../components/post';
 export default {
+  components: {post},
+  data() {
+    return {
+      tabList: [],
+      //当前显示标签
+      tabActive: localStorage.getItem("token") ? 1 : 0,
+      loading: false,   //底部加载中提示
+      pageSize: 5       //每次加载的数据量
+    };
+  },
   mounted() {
+    //vue实例挂载完毕，发送请求，获取分类标签
     this.$axios.get("/category").then(res => {
-      // console.log(res);
-    }).catch(err=>{
-      console.log(err)
-    })
+      //给分类标签添加一个posts属性，用于存放文章列表
+      res.data.data.forEach(element => {
+        //初始化列表内容
+        element.posts=[];        
+        element.currentPage=1;    //当前页数
+        element.finished=false;   //数据是否加载完毕
+      });
 
+      //过滤出热门的标签 
+      this.tabList = res.data.data.filter(element => element.is_top == 1);
+
+      //调用获取文章数据列表方法
+      this.getPostList(this.tabActive)
+    });
   },
   methods: {
-    toProfile() {
-      // this.$router.push({ name: "profile" }).catch(err=>{console.log(err)});
-      this.$router.push({ name: "profile" })
+    //获取文章数据列表
+    getPostList(tabIndex){
+      //要发送请求的参数
+      const params={
+        category: this.tabList[tabIndex].id,
+        pageIndex: this.tabList[tabIndex].currentPage,
+        pageSize: this.pageSize
+      }
+
+      // 发送请求，获取文章数据列表
+      this.$axios.get(`/post`,{params}).then(res=>{
+
+        // 给对应的分类标签添加文章数据 , 新旧数据合并
+        this.tabList[tabIndex].posts=[...this.tabList[tabIndex].posts,...res.data.data];
+
+        // 数据加载完，关闭底部加载中提示
+        this.loading=false;
+
+        //判断数据是否加载完毕
+        this.tabList[tabIndex].finished=res.data.data.length<this.pageSize && true;
+        
+      })
+    },
+    //加载更多数据
+    LoadMorePost(){
+      // 设置延时
+      let timer=setTimeout(() => {
+        //清除延时
+        clearTimeout(timer)
+
+        //当前页面+1
+        this.tabList[this.tabActive].currentPage++;
+
+        //调用获取文章数据列表方法
+        this.getPostList(this.tabActive)
+      }, 1000);
+     
     }
-  }
+  },
+  watch: {
+    // 监听当前标签
+    tabActive(newTabIndex){
+      //判断当前标签是否有文章数据，没有则调用获取文章数据列表方法
+      this.tabList[newTabIndex].posts.length==0 && this.getPostList(newTabIndex)
+    }
+  },
 };
 </script>
 
 <style lang="less" scoped>
 .container {
+  // 头部
   .header {
     display: flex;
     align-items: center;
@@ -91,22 +164,37 @@ export default {
     }
   }
 
-  .van-tab {
-    font-size: 18px !important;
-    color: #000;
-  }
+  // 导航
+  .tab{
+    position: relative;
+    overflow: hidden;
 
-  .tab-icon {
-    height: 44px;
-    background-color: #e4e4e4;
-    line-height: 44px;
-    text-align: center;
+    /deep/.van-tabs__wrap{
+      padding-right: 40px;
+    }
 
-    i {
-      display: block;
-      font-size: 18px;
-      transform: rotate(-90deg);
+    /deep/.van-tab {
+      font-size: 5vw !important;
+      // color: #000;
+    }
+
+    .tab-icon {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 40px;
+      height: 12.222vw;
+      line-height: 12.222vw;
+      text-align: center;
+      background-color: #e4e4e4;
+
+      i {
+        display: block;
+        font-size: 5vw;
+        transform: rotate(-90deg);
+      }
     }
   }
+  
 }
 </style>
