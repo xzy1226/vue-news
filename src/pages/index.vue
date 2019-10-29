@@ -5,7 +5,7 @@
       <div class="logo">
         <i class="iconfont iconnew"></i>
       </div>
-      <div class="search">
+      <div class="search" >
         <i class="iconfont iconsearch"></i>
         <span>搜索新闻</span>
       </div>
@@ -33,7 +33,7 @@
         </van-tab>
       </van-tabs>
 
-      <div class="tab-icon">
+      <div class="tab-icon" @click="$router.push('/category')">
           <i class="iconfont iconjiantou2"></i>
       </div>
     </div>

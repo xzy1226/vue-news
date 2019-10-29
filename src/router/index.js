@@ -8,7 +8,8 @@ import Profile from '@/pages/Profile'
 import EditProfile from '@/pages/EditProfile'
 import MyFollow from '@/pages/MyFollow'
 import MyComment from '@/pages/MyComment'
-import MyCollection from '@/pages/MyCollection';
+import MyCollection from '@/pages/MyCollection'
+import Category from '@/pages/Category'
 
 // const originalPush = Router.prototype.push
 // Router.prototype.push = function push(location) {
@@ -62,6 +63,11 @@ export default new Router({
       path: '/mycollection',
       name: 'mycollection',
       component: MyCollection
+    },
+    {
+      path: '/category',
+      name: 'category',
+      component: Category
     }
   ]
 })
