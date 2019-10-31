@@ -10,6 +10,7 @@ import MyFollow from '@/pages/MyFollow'
 import MyComment from '@/pages/MyComment'
 import MyCollection from '@/pages/MyCollection'
 import Category from '@/pages/Category'
+import PostSearch from '@/pages/PostSearch';
 
 // const originalPush = Router.prototype.push
 // Router.prototype.push = function push(location) {
@@ -20,8 +21,7 @@ import Category from '@/pages/Category'
 Vue.use(Router)
 
 export default new Router({
-  routes: [
-    {
+  routes: [{
       path: '/',
       redirect: '/index'
     },
@@ -59,7 +59,7 @@ export default new Router({
       path: '/mycomment',
       name: 'mycomment',
       component: MyComment
-    },{
+    }, {
       path: '/mycollection',
       name: 'mycollection',
       component: MyCollection
@@ -68,6 +68,11 @@ export default new Router({
       path: '/category',
       name: 'category',
       component: Category
+    },
+    {
+      path: '/postsearch',
+      name: 'postsearch',
+      component: PostSearch
     }
   ]
 })
