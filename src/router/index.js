@@ -10,7 +10,8 @@ import MyFollow from '@/pages/MyFollow'
 import MyComment from '@/pages/MyComment'
 import MyCollection from '@/pages/MyCollection'
 import Category from '@/pages/Category'
-import PostSearch from '@/pages/PostSearch';
+import PostSearch from '@/pages/PostSearch'
+import PostDetail from '@/pages/PostDetail'
 
 // const originalPush = Router.prototype.push
 // Router.prototype.push = function push(location) {
@@ -73,6 +74,11 @@ export default new Router({
       path: '/postsearch',
       name: 'postsearch',
       component: PostSearch
+    },
+    {
+      path: '/postdetail/:id',
+      name: 'postdetail',
+      component: PostDetail
     }
   ]
 })

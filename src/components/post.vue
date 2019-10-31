@@ -2,8 +2,8 @@
   <div class="post">
     <!-- 上下布局，封面多于一张 -->
     <div class="layout-vertical" v-if="item.cover.length>1">
-      <div class="post">{{item.title}}</div>
-      <div class="cover">
+      <div class="post" @click="toDetail">{{item.title}}</div>
+      <div class="cover" @click="toDetail">
         <div class="cover-img" v-for="(urlItem,index) in item.cover" :key="index">
           <img :src="urlItem.url" alt />
         </div>
@@ -13,8 +13,8 @@
 
     <!-- 视频模块布局 -->
     <div class="layout-video" v-if="item.type == 2">
-      <div class="post">{{item.title}}</div>
-      <div class="cover">
+      <div class="post" @click="toDetail">{{item.title}}</div>
+      <div class="cover" @click="toDetail">
         <img class="cover-video" :src="item.cover[0].url" alt />
         <i class="iconfont iconshipin"></i>
       </div>
@@ -23,11 +23,11 @@
 
     <!-- 左右布局，封面只有一张 -->
     <div class="layout-cross" v-else>
-      <div class="post">
-        <div class="title">{{item.title}}</div>
+      <div class="post"> 
+        <div class="title" @click="toDetail">{{item.title}}</div>
         <div class="user">{{item.user.nickname}} {{item.comment_length}}跟帖</div>
       </div>
-      <img :src="item.cover[0].url" alt />
+      <img :src="item.cover[0].url" alt @click="toDetail"/>
     </div>
   </div>
 </template>
@@ -35,15 +35,25 @@
 <script>
 export default {
   props: ["item"],
-
   mounted() {
     //遍历图片,判断img的路劲是否有ip
     this.item.cover.forEach(element => {
       element.url = element.url.includes("http")
         ? element.url
         : this.$axios.defaults.baseURL + element.url;
-    });
-  }
+    })
+  },
+  methods: {
+    toDetail(){
+      //跳转详情页
+      this.$router.push({
+        name: 'postdetail',
+        params: {
+          id: this.item.id
+        }
+      })
+    }
+  },
 };
 </script>
 
