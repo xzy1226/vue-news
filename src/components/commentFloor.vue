@@ -1,9 +1,10 @@
 <template>
   <div>
-    <floor :commentParent='commentParent.parent' v-if="commentParent.parent"></floor>
+    <floor :count="count-1" :commentParent='commentParent.parent' v-if="commentParent.parent"></floor>
     <div class="floor">
       <div class="floor-header">
         <div class="info">
+          {{count}}楼：
           {{commentParent.user.nickname}}
           <span class="time">2小时</span>
         </div>
@@ -17,7 +18,7 @@
 <script>
 export default {
   name: "floor",
-  props: ["commentParent"]
+  props: ["commentParent","count"]
 };
 </script>
 

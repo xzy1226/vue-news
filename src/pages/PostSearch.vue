@@ -13,7 +13,6 @@
     </div>
 
     <div class="history-record">
-      
     </div>
   </div>
 </template>

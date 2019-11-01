@@ -51,12 +51,19 @@
         <div class="goodComments">精彩跟帖</div>
         <div class="userComments">
           <div class="noComments" v-if="comments.length==0">暂无跟帖，抢占沙发</div>
-          <comment v-else v-for="(item,index) in comments" :key="index" :comment="item" />
+          <div v-else>
+            <comment v-for="(item,index) in comments" :key="index" :comment="item" @reply="replyObj" />
+            <div class="moreComment" @click="toMoreComment">更多跟帖</div>
+          </div>
         </div>
-        <div class="moreComment" @click="moreComment">更多跟帖</div>
       </div>
     </div>
-    <postDetailFooter :item="post" />
+    <postDetailFooter
+      :item="post"
+      :replyItem="reply"
+      @newComment="getComments"
+      @toMoreComment="toMoreComment"
+    />
   </div>
 </template>
 
@@ -69,9 +76,10 @@ export default {
   data() {
     return {
       postId: this.$route.params.id,
-      post: {},
-      comments: []
-    };
+      post: {},       //文章详情数据
+      comments: [],   //评论列表
+      reply: {},      //点击回复传过来的参数
+    }
   },
   mounted() {
     let params = {
@@ -90,12 +98,9 @@ export default {
         this.comments = res2.data.data;
       })
     );
-    // this.$axios.get(`/post/${this.$route.params.id}`).then(res => {
-    //   this.post = res.data.data;
-    //   console.log(this.post);
-    // });
   },
   methods: {
+    // 点赞
     lick() {
       this.$axios.get(`/post_like/${this.postId}`).then(res => {
         if (res.data.message == "点赞成功") {
@@ -105,15 +110,31 @@ export default {
           this.post.like_length -= 1;
           this.post.has_like = false;
         }
-      })
+      });
     },
-    moreComment(){
+    //跳转精彩跟帖页面
+    toMoreComment() {
       this.$router.push({
-        name: 'morecomments',
+        name: "morecomments",
         params: {
           id: this.postId
         }
-      })
+      });
+    },
+    //接受点击回复时返回的 parent_id 和 回复的用户名
+    replyObj(val) {
+      this.reply = val;
+    },
+    //获取评论数据
+    getComments() {
+      let params = {
+        pageSize: 3,
+        pageIndex: 1
+      };
+      this.$axios.get(`/post_comment/${this.postId}`, { params })
+        .then(res=>{
+          this.comments = res.data.data;
+        })
     }
   }
 };
@@ -229,7 +250,7 @@ export default {
         }
       }
 
-      .moreComment{
+      .moreComment {
         width: 33.333vw;
         height: 8.333vw;
         margin: 8.333vw auto 0;

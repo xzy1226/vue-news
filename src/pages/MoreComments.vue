@@ -1,6 +1,6 @@
 <template>
   <div>
-    <headerNav :title="精彩跟帖"/>
+    <headerNav title="精彩跟帖"/>
     <comment v-for="(item,index) in comments" :key="index" :comment="item" />
 
   </div>

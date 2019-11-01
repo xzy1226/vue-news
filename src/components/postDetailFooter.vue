@@ -6,9 +6,10 @@
       <input type="text" placeholder="写跟贴" @focus="showArea" />
       <div class="comment">
         <div class="comment-length">{{item.comment_length}}</div>
-        <i class="iconfont iconpinglun-"></i>
+        <i class="iconfont iconpinglun-" @click="toMoreComment"></i>
       </div>
-      <i class="iconfont iconshoucang" @click='star' 
+      <i class="iconfont iconshoucang" 
+        @click='star' 
         :class="{isStar: item.has_star}"
       ></i>
       <i class="iconfont iconfenxiang"></i>
@@ -16,19 +17,34 @@
 
     <!-- 已激活状态 -->
     <div class="footer-enable" v-if="isFocus">
-      <textarea class="commentArea" ref="commentArea" rows="3" @blur="isFocus=false"></textarea>
-      <div class="btn-send">发送</div>
+      <div class="commentArea">
+        <p v-if="replyItem.name">回复：@ {{replyItem.name}}</p>
+        <textarea class="textarea" v-model="comment" ref="commentArea" rows="3" @blur="cancelReply"></textarea>
+      </div>
+      <div class="btn-send" @click="sendComment">发送</div>
     </div>
   </div>
 </template>
 
 <script>
 export default {
-  props: ['item'],
+  props: ['item','replyItem'],
   data() {
     return {
       //记录当前激活状态, 默认未激活
-      isFocus: false
+      isFocus: false,
+      comment: ''
+    }
+  },
+  watch: {
+    //触发文本域获取焦点
+    replyItem(){
+        this.isFocus=this.replyItem.isActive
+        this.$nextTick(()=>this.$refs.commentArea.focus()) 
+    },
+    //监听 是否要 @用户
+    isFocus(){
+      if(this.isFocus==false) this.replyItem.name=''  
     }
   },
   methods: {
@@ -42,9 +58,32 @@ export default {
     //收藏
     star(){
       this.$axios.get(`/post_star/${this.item.id}`).then(res=>{
-        console.log(res)
         this.item.has_star=res.data.message=="收藏成功"?true:false;
       })
+    },
+    //失去焦点，隐藏文本域
+    cancelReply(){
+      if(!this.comment) this.isFocus=false;
+    },
+    //发送评论
+    sendComment(){
+      this.$axios
+        .post(`/post_comment/${this.item.id}`,{
+          parent_id: this.replyItem.id || null,
+          content: this.comment
+        })
+        .then(res=>{
+          //告诉父组件刷新评论数据
+          this.$emit('newComment');
+          //失去焦点
+          this.isFocus=false;
+          // 清空内容
+          this.comment=''
+        })
+    },
+    //告诉父组件跳转到更多跟帖
+    toMoreComment(){
+      this.$emit('toMoreComment')
     }
   },
 };
@@ -110,14 +149,23 @@ export default {
 
     .commentArea{
       flex: 1;
-      height: 25vw;
+      height: 26.389vw;
       padding-top: 2.778vw;
-      text-indent: 2.778vw;
+      padding-left: 2.778vw;
       border-radius: 2.778vw;
       background-color: #d7d7d7;
-      border: none;
-      outline: none;
-      resize: none;
+      
+      p{
+        font-size: 3.889vw;
+        color: #666;
+      }
+      .textarea{
+        height: auto;
+        background-color: #d7d7d7;
+        border: none;
+        outline: none;
+        resize: none;
+      }
     }
 
     .btn-send{

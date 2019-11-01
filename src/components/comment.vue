@@ -7,10 +7,10 @@
           <div class="nickname">{{comment.user.nickname}}</div>
           <div class="time">2小时前</div>
         </div>
-        <div class="reply">回复</div>
+        <div class="reply" @click="replyActive">回复</div>
       </div>
 
-      <commentFloor :commentParent="comment.parent" v-if="comment.parent" />
+      <commentFloor :commentParent="comment.parent" :count="parentCount" v-if="comment.parent" />
       <div class="comment-content">
         {{comment.content}}
       </div>
@@ -23,10 +23,34 @@ import commentFloor from './commentFloor'
 export default {
   components: {commentFloor},
   props:['comment'],
+  data() {
+    return {
+      parentCount: this.getParentLen(0,this.comment)
+    }
+  },
   mounted() {
     this.comment.user.head_img = this.comment.user.head_img
         ? this.$axios.defaults.baseURL + this.comment.user.head_img
         : "/static/img/default.png";
+  },
+  methods: {
+    //向父组件传参
+    replyActive(){
+      this.$emit('reply', {
+        id: this.comment.id,
+        name: this.comment.user.nickname,
+        isActive: true
+      })
+    },
+    getParentLen(i,item){
+      if(item.parent){
+        return this.getParentLen(i+1,item.parent)
+      }else{
+        return i
+      }
+      
+
+    }
   },
 }
 </script>

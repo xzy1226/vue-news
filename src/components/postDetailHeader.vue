@@ -3,33 +3,26 @@
     <i class="iconfont iconjiantou2" @click='$router.push("/")'></i>
     <i class="iconfont iconnew"></i>
     <!-- 已关注 -->
-    <div class="follow-disable" @click="unFollow"  v-if="isFollow">已关注</div>
+    <div class="follow-disable" @click="unFollow"  v-if="item.has_follow==true">已关注</div>
     <!-- 未关注 -->
-    <div class="follow-active" @click="follow" v-else>关注</div>
+    <div class="follow-active" @click="follow" v-else-if="item.has_follow==false">关注</div>
   </div>
 </template>
 
 <script>
 export default {
   props: ['item'],
-  data() {
-    return {
-      isFollow: this.item.has_follow
-    }
-  },
   methods: {
     follow(){
-      console.log('已关注')
       this.$axios.get(`/user_follows/${this.item.user.id}`)
       .then(res=>{
-        this.isFollow=res.data.message=='关注成功' && true;
+        this.item.has_follow=res.data.message=='关注成功' && true;
       })
     },
     unFollow(){
-      console.log('取消关注')
       this.$axios.get(`/user_unfollow/${this.item.user.id}`)
       .then(res=>{
-        this.isFollow=res.data.message=='取消关注成功' && false;
+        this.item.has_follow=res.data.message=='取消关注成功' && false;
       })
     }
   },
