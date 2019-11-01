@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import HelloWorld from '@/components/HelloWorld'
 import Login from '@/pages/Login'
 import Register from '@/pages/Register'
 import Index from '@/pages/Index'
@@ -12,6 +11,7 @@ import MyCollection from '@/pages/MyCollection'
 import Category from '@/pages/Category'
 import PostSearch from '@/pages/PostSearch'
 import PostDetail from '@/pages/PostDetail'
+import MoreComments from '@/pages/MoreComments'
 
 // const originalPush = Router.prototype.push
 // Router.prototype.push = function push(location) {
@@ -79,6 +79,11 @@ export default new Router({
       path: '/postdetail/:id',
       name: 'postdetail',
       component: PostDetail
+    },
+    {
+      path: '/morecomments',
+      name: 'morecomments',
+      component: MoreComments
     }
   ]
 })
