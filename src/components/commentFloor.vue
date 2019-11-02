@@ -1,6 +1,6 @@
 <template>
   <div>
-    <floor :count="count-1" :commentParent='commentParent.parent' v-if="commentParent.parent"></floor>
+    <floor @reply="reply" :count="count-1" :commentParent='commentParent.parent' v-if="commentParent.parent"></floor>
     <div class="floor">
       <div class="floor-header">
         <div class="info">
@@ -8,7 +8,7 @@
           {{commentParent.user.nickname}}
           <span class="time">2小时</span>
         </div>
-        <div class="reply">回复</div>
+        <div class="reply" @click="reply">回复</div>
       </div>
       <div class="floor-content">{{commentParent.content}}</div>
     </div>
@@ -18,7 +18,18 @@
 <script>
 export default {
   name: "floor",
-  props: ["commentParent","count"]
+  props: ["commentParent","count"],
+  methods: {
+    reply(data){
+      // 子评论回复 要一层一层往外传
+      this.$emit('reply', data.id?data:{
+        id: this.commentParent.id,
+        name: this.commentParent.user.nickname,
+        isActive: true
+      })
+
+    }
+  },
 };
 </script>
 

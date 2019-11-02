@@ -10,7 +10,7 @@
         <div class="reply" @click="replyActive">回复</div>
       </div>
 
-      <commentFloor :commentParent="comment.parent" :count="parentCount" v-if="comment.parent" />
+      <commentFloor @reply="replyActive" :commentParent="comment.parent" :count="parentCount" v-if="comment.parent" />
       <div class="comment-content">
         {{comment.content}}
       </div>
@@ -35,21 +35,16 @@ export default {
   },
   methods: {
     //向父组件传参
-    replyActive(){
-      this.$emit('reply', {
+    replyActive(data){
+      this.$emit('reply',data.id ? data : {
         id: this.comment.id,
         name: this.comment.user.nickname,
         isActive: true
       })
     },
+    //统计子评论数
     getParentLen(i,item){
-      if(item.parent){
-        return this.getParentLen(i+1,item.parent)
-      }else{
-        return i
-      }
-      
-
+      return item.parent?this.getParentLen(i+1,item.parent):i;
     }
   },
 }
