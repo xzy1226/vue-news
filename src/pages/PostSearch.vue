@@ -23,7 +23,7 @@
       </div>
       <div class="hot">
         <h2>热门搜索</h2>
-        <p v-for="(item,index) in hotList" :key="index">{{item}}</p>
+        <p @click="searchItem(item)" v-for="(item,index) in hotList" :key="index">{{item}}</p>
       </div>
     </div>
   </div>
@@ -56,6 +56,17 @@ export default {
     search(){
       this.$axios.get(`/post_search?keyword=${this.searchText}`).then(res=>{
         this.posts=res.data.data;
+        //遍历
+        this.posts.forEach(element => {
+          //手动添加评论数量
+          element.comment_length=element.comments.length
+          //判断img的路劲是否有ip
+          element.cover.forEach(element => {
+            element.url = element.url.includes("http")
+              ? element.url
+              : this.$axios.defaults.baseURL + element.url;
+          })
+        })
         //判断搜索内容是否存在历史记录中，没有则添加到历史记录
         !this.historyList.includes(this.searchText) && this.historyList.push(this.searchText)
       })
