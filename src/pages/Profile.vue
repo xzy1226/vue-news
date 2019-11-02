@@ -73,10 +73,11 @@ export default {
     toEditPage() {
       this.$router.push({ name: "editprofile" });
     },
+    //退出
     Logout() {
       //删除数据
-      localStorage.removeItem("token");
-      localStorage.removeItem("user_id");
+      localStorage.clear();
+
       //提示
       this.$toast.success("退出成功");
       //设置定时

@@ -5,14 +5,18 @@
     <div class="remove-category">
       <div class="title">点击删除以下频道</div>
       <div class="content">
-        <div class="tag-remove" v-for="(item,index) in removeTag" :key="index">{{item.name}}</div>
+        <div class="tag-remove" 
+          v-for="(item,index) in activeTag" 
+          :key="index"
+          @click="removeCategory(index)"
+        >{{item.name}}</div>
       </div>
     </div>
 
     <div class="add-category">
       <div class="title">点击添加以下频道</div>
       <div class="content">
-        <div class="tag-add" v-for="(item,index) in addTag" :key="index" @click="addCategory(index)">{{item.name}}</div>
+        <div class="tag-add" v-for="(item,index) in deactiveTag" :key="index" @click="addCategory(index)">{{item.name}}</div>
 
       </div>
     </div>
@@ -25,34 +29,43 @@ export default {
   components: {headerNav},
   data() {
     return {
-      removeTag: [],
-      addTag: []
+      activeTag: [],
+      deactiveTag: []
+    }
+  },
+  watch: {
+    activeTag(){
+      localStorage.setItem('activeTag',JSON.stringify(this.activeTag))
+    },
+    deactiveTag(){
+      localStorage.setItem('deactiveTag',JSON.stringify(this.deactiveTag))
     }
   },
   mounted() {
-    this.$axios.get('/category').then(res=>{
-
-      this.removeTag=res.data.data.filter(item=> item.is_top==1);
-      this.addTag=res.data.data.filter(item=> item.is_top==0);
-
-      console.log(this.removeTag)
-      console.log(this.addTag)
-    })
+    
+    localStorage.getItem('activeTag')?
+      this.activeTag=JSON.parse(localStorage.getItem('activeTag')):
+      this.$axios.get('/category').then(res=>{
+        this.activeTag=res.data.data;
+      });
+    
+    
+    this.deactiveTag=localStorage.getItem('deactiveTag')?JSON.parse(localStorage.getItem('deactiveTag')):[];
+    
   },
   methods: {
     addCategory(index){
-      let name=this.addTag[index].name;
-      console.log(name)
+      let name=this.deactiveTag[index].name;
+      
+      this.activeTag.push(this.deactiveTag[index]);
+      this.deactiveTag.splice(index,1)
+    },
+    removeCategory(index){
+      let name=this.activeTag[index].name;
+      if(name=='关注'||name=='头条') return;
 
-      this.$axios.post('/category',{
-        name: this.addTag[index].name,
-        is_top: 1
-      })
-      .then(res=>{
-
-        this.removeTag.push(this.addTag[index]);
-        this.addTag.splice(index,1)
-      })
+      this.deactiveTag.push(this.activeTag[index]);
+      this.activeTag.splice(index,1)
     }
   },
 }
