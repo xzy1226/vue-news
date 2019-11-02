@@ -81,7 +81,7 @@ export default new Router({
       component: PostDetail
     },
     {
-      path: '/morecomments',
+      path: '/morecomments/:id',
       name: 'morecomments',
       component: MoreComments
     }
