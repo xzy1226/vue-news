@@ -44,7 +44,7 @@ export default {
     },
     //监听 是否要 @用户
     isFocus(){
-      if(this.isFocus==false) this.replyItem.name=''  
+      this.replyItem.name= this.isFocus?this.replyItem.name:''
     }
   },
   methods: {
@@ -75,6 +75,8 @@ export default {
         .then(res=>{
           //告诉父组件刷新评论数据
           this.$emit('newComment');
+          //评论数量加1
+          this.item.comment_length+=1;
           //失去焦点
           this.isFocus=false;
           // 清空内容

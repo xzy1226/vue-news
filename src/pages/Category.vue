@@ -29,8 +29,8 @@ export default {
   components: {headerNav},
   data() {
     return {
-      activeTag: [],
-      deactiveTag: []
+      activeTag: [],    //激活标签
+      deactiveTag: []   //未激活标签
     }
   },
   watch: {
@@ -42,28 +42,28 @@ export default {
     }
   },
   mounted() {
-    
+    //判断激活标签是否存在
     localStorage.getItem('activeTag')?
       this.activeTag=JSON.parse(localStorage.getItem('activeTag')):
       this.$axios.get('/category').then(res=>{
         this.activeTag=res.data.data;
       });
     
-    
+    //判断未激活标签是否存在    
     this.deactiveTag=localStorage.getItem('deactiveTag')?JSON.parse(localStorage.getItem('deactiveTag')):[];
     
   },
   methods: {
     addCategory(index){
-      let name=this.deactiveTag[index].name;
-      
+      //数据交互
       this.activeTag.push(this.deactiveTag[index]);
       this.deactiveTag.splice(index,1)
     },
     removeCategory(index){
+      //限定 '关注' 和 '头条' 不能删除
       let name=this.activeTag[index].name;
       if(name=='关注'||name=='头条') return;
-
+      //数据交互
       this.deactiveTag.push(this.activeTag[index]);
       this.activeTag.splice(index,1)
     }

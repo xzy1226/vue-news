@@ -29,21 +29,25 @@ export default {
     return {
       mycomments: [],
       count: 0,
-      isMoreComment: true
+      isMoreComment: true,
+      pageSize: 5
     }
   },
   methods: {
     moreComment(){
-      this.$axios.get(`/user_comments?pageIndex=${this.count++}&pageSize=3`).then(res=>{
-        // this.mycomments=res.data.data;
-        console.log(res.data.data.length)
-        if(res.data.data.length<3){
-          this.isMoreComment=false
+      this.$axios.get(`/user_comments`,{
+        params: {
+          pageIndex: this.count++,
+          pageSize: this.pageSize
         }
+      }).then(res=>{
+        //返回数据长度小于 pageSize，说明数据加载完毕
+        if(res.data.data.length<this.pageSize) this.isMoreComment=false;
+        
+        //将返回数据添加的渲染数据中
         res.data.data.forEach(element => {
           this.mycomments.push(element)
         });
-        console.log(this.mycomments)
       })
     }
   },

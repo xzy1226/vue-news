@@ -36,10 +36,10 @@ export default {
   components: {post},
   data() {
     return {
-      searchText: '',
-      hotList: ['美女','阿信','关晓彤'],
-      historyList: JSON.parse(localStorage.getItem('history')) || [],
-      posts: []
+      searchText: '',   //搜索关键字
+      hotList: ['美女','阿信','关晓彤'],    //热门搜索
+      historyList: JSON.parse(localStorage.getItem('history')) || [],   //历史搜索
+      posts: []     //搜索结果文章
     }
   },
   watch: {
@@ -53,6 +53,7 @@ export default {
     }
   },
   methods: {
+    //搜索方法
     search(){
       this.$axios.get(`/post_search?keyword=${this.searchText}`).then(res=>{
         this.posts=res.data.data;

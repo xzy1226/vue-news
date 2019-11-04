@@ -11,7 +11,7 @@
     <div class="userName">
       <authInput
         type="text"
-        placeholder="用户名/手机号码"
+        placeholder="手机号码"
         rule="^\d{5,13}$"
         err_message="请输入正确的手机号"
         @input="setUserName"

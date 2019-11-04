@@ -46,7 +46,7 @@ export default {
         params: {
           id: this.postId
         }
-      });
+      })
     },
     //接受点击回复时返回的 parent_id 和 回复的用户名
     replyObj(val) {
@@ -57,7 +57,6 @@ export default {
       this.$axios.get(`/post_comment/${this.postId}`)
         .then(res=>{
           this.comments = res.data.data;
-          console.log(this.comments);
         })
     }
   },
@@ -66,6 +65,6 @@ export default {
 
 <style lang="less" scoped>
   .more-comments{
-    padding-bottom: 80px;
+    padding-bottom: 22.222vw;
   }
 </style>
