@@ -1,6 +1,6 @@
-# news_admin
+# news
 
-> A Vue.js project
+> Vue 练手项目， 仿今日头条
 
 ## Build Setup
 
