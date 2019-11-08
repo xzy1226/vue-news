@@ -63,9 +63,7 @@ export default {
           element.comment_length=element.comments.length
           //判断img的路劲是否有ip
           element.cover.forEach(element => {
-            element.url = element.url.includes("http")
-              ? element.url
-              : this.$axios.defaults.baseURL + element.url;
+            this.$fixImg(element.url)
           })
         })
         //判断搜索内容是否存在历史记录中，没有则添加到历史记录

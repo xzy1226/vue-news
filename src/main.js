@@ -60,10 +60,12 @@ axios.interceptors.response.use((res) => {
   return res;
 });
 
-
 Vue.prototype.$axios = axios;
 
-
+// 封装全局函数，修复图片路径
+Vue.prototype.$fixImg = url => {
+  return url.includes('http') ? url : axios.defaults.baseURL + url
+}
 
 
 Vue.config.productionTip = false

@@ -66,7 +66,7 @@ export default {
         username: this.username,
         password: this.password
       }).then(res=>{
-        if(!res.data.statusCode){
+        if(res.data.statusCode==200){
           //提示信息
           this.$toast.success( res.data.message);
           

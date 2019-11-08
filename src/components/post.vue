@@ -38,9 +38,7 @@ export default {
   mounted() {
     //遍历图片,判断img的路劲是否有ip
     this.item.cover.forEach(element => {
-      element.url = element.url.includes("http")
-        ? element.url
-        : this.$axios.defaults.baseURL + element.url;
+      element.url=this.$fixImg(element.url)
     })
   },
   methods: {
